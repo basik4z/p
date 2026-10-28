@@ -1,543 +1,362 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BLACKOUT — ДОНАТ</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTELLIGENCE OSINT SYSTEM v4.5</title>
+    <style>
+        :root {
+            --bg-color: #050b14;
+            --card-bg: #0c1524;
+            --primary: #0055ff;
+            --primary-glow: #00c3ff;
+            --text: #ffffff;
+            --text-muted: #7085a0;
+            --success: #00e676;
+            --border: #14253d;
+        }
 
-    body {
-      background: #0a0a0a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px 20px;
-      font-family: 'Segoe UI', 'Arial Black', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, 'Courier New', monospace;
+        }
 
-    /* ===== АНИМАЦИЯ ФОНА (партиклы) ===== */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #ff2222;
-      border-radius: 50%;
-      opacity: 0.2;
-      animation: floatParticle linear infinite;
-    }
-    @keyframes floatParticle {
-      0% {
-        transform: translateY(100vh) scale(0);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.3;
-      }
-      90% {
-        opacity: 0.3;
-      }
-      100% {
-        transform: translateY(-10vh) scale(1);
-        opacity: 0;
-      }
-    }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-    /* ===== ШАПКА ===== */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      width: 100%;
-      max-width: 420px;
-      position: relative;
-      z-index: 1;
-      animation: fadeDown 0.8s ease-out;
-    }
-    .header h1 {
-      color: #fff;
-      font-size: 52px;
-      letter-spacing: 14px;
-      text-transform: uppercase;
-      font-weight: 900;
-      text-shadow: 0 0 50px rgba(255, 34, 34, 0.25);
-      animation: glowPulse 2s ease-in-out infinite;
-    }
-    @keyframes glowPulse {
-      0%,
-      100% {
-        text-shadow: 0 0 50px rgba(255, 34, 34, 0.2);
-      }
-      50% {
-        text-shadow: 0 0 80px rgba(255, 34, 34, 0.6);
-      }
-    }
-    .header .sub {
-      color: #666;
-      font-size: 13px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-top: 6px;
-    }
-    .header .sub span {
-      color: #ff4444;
-      font-weight: bold;
-    }
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 85, 255, 0.15);
+            position: relative;
+        }
 
-    /* ===== СЕЛЕКТОР ===== */
-    .donate-selector {
-      background: #141414;
-      border: 1px solid #2a2a2a;
-      border-radius: 20px;
-      padding: 24px 20px;
-      max-width: 420px;
-      width: 100%;
-      margin-bottom: 35px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-      animation: fadeUp 0.8s ease-out 0.2s both;
-    }
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @keyframes fadeDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .container::before {
+            content: 'TARGET SEARCH SYSTEM v4.5';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg-color);
+            padding: 0 10px;
+            font-size: 11px;
+            color: var(--primary-glow);
+            letter-spacing: 2px;
+            font-weight: bold;
+            border: 1px solid var(--border);
+        }
 
-    .donate-selector .label {
-      color: #aaa;
-      font-size: 14px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      display: block;
-    }
-    .donate-selector .label span {
-      color: #fff;
-      font-weight: bold;
-    }
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 22px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
 
-    .amount-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .amount-btn {
-      background: #1e1e1e;
-      border: 2px solid #333;
-      color: #ccc;
-      padding: 12px 20px;
-      border-radius: 40px;
-      font-size: 18px;
-      font-weight: 900;
-      cursor: pointer;
-      transition: 0.3s;
-      font-family: inherit;
-      min-width: 80px;
-      position: relative;
-      overflow: hidden;
-    }
-    .amount-btn::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 34, 34, 0.3);
-      transition: 0.5s;
-      transform: translate(-50%, -50%);
-    }
-    .amount-btn:active::after {
-      width: 300px;
-      height: 300px;
-    }
-    .amount-btn:hover {
-      border-color: #ff4444;
-      color: #fff;
-      background: #2a1a1a;
-      transform: scale(1.05);
-    }
-    .amount-btn.active {
-      border-color: #ff2222;
-      background: #ff2222;
-      color: #fff;
-      box-shadow: 0 0 40px rgba(255, 34, 34, 0.5);
-      animation: btnPop 0.3s ease-out;
-    }
-    @keyframes btnPop {
-      0% {
-        transform: scale(0.8);
-      }
-      60% {
-        transform: scale(1.15);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
+        /* Вкладки / Табы */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
 
-    .selected-display {
-      margin-top: 18px;
-      color: #fff;
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      transition: 0.3s;
-    }
-    .selected-display small {
-      color: #666;
-      font-weight: 400;
-      font-size: 16px;
-    }
-    .selected-display .amount-change {
-      animation: amountPop 0.4s ease-out;
-    }
-    @keyframes amountPop {
-      0% {
-        transform: scale(1);
-      }
-      30% {
-        transform: scale(1.4);
-        color: #ff4444;
-      }
-      70% {
-        transform: scale(0.9);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
+        .tab-btn {
+            flex: 1;
+            background: rgba(12, 21, 36, 0.8);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
 
-    /* ===== ГАЛЕРЕЯ ===== */
-    .gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      max-width: 420px;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
+        .tab-btn:hover {
+            border-color: var(--primary-glow);
+            color: #fff;
+            background: rgba(0, 85, 255, 0.1);
+        }
 
-    .card {
-      background: #141414;
-      border-radius: 24px;
-      padding: 14px;
-      border: 1px solid #222;
-      position: relative;
-      transition: 0.4s;
-      animation: cardAppear 0.6s ease-out both;
-    }
-    .card:nth-child(1) {
-      animation-delay: 0.1s;
-    }
-    .card:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-    .card:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-    .card:nth-child(4) {
-      animation-delay: 0.4s;
-    }
-    .card:nth-child(5) {
-      animation-delay: 0.5s;
-    }
+        .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 15px rgba(0, 85, 255, 0.4);
+        }
 
-    @keyframes cardAppear {
-      from {
-        opacity: 0;
-        transform: translateX(-40px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0) scale(1);
-      }
-    }
+        /* Поля ввода */
+        .input-group {
+            display: none;
+            margin-bottom: 20px;
+            animation: fadeIn 0.4s ease forwards;
+        }
 
-    .card:hover {
-      border-color: #ff4444;
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 10px 40px rgba(255, 34, 34, 0.1);
-    }
+        .input-group.active {
+            display: block;
+        }
 
-    .card img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 12px;
-      filter: grayscale(100%);
-      transition: 0.5s;
-    }
-    .card img:hover {
-      filter: grayscale(80%) brightness(1.05);
-    }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
 
-    /* ===== БЕЙДЖ ===== */
-    .donat-badge {
-      position: absolute;
-      top: 22px;
-      right: 22px;
-      background: #ff2222;
-      color: #fff;
-      font-weight: 900;
-      font-size: 20px;
-      padding: 6px 16px;
-      border-radius: 40px;
-      transform: rotate(4deg);
-      box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      border: 2px solid #fff;
-      transition: 0.3s;
-      animation: badgeGlow 2s ease-in-out infinite;
-    }
-    @keyframes badgeGlow {
-      0%,
-      100% {
-        box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
-      }
-      50% {
-        box-shadow: 0 0 60px rgba(255, 0, 0, 0.9);
-      }
-    }
-    .donat-badge .amount {
-      font-size: 26px;
-      margin-left: 4px;
-      display: inline-block;
-      transition: 0.3s;
-    }
-    .donat-badge .amount.bounce {
-      animation: badgeBounce 0.5s ease-out;
-    }
-    @keyframes badgeBounce {
-      0% {
-        transform: scale(1);
-      }
-      30% {
-        transform: scale(1.6) rotate(-5deg);
-        color: #ffdd44;
-      }
-      60% {
-        transform: scale(0.8) rotate(3deg);
-      }
-      100% {
-        transform: scale(1) rotate(0);
-      }
-    }
+        input {
+            width: 100%;
+            padding: 14px;
+            background: #060d1a;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
 
-    /* ===== ФУТЕР ===== */
-    .footer {
-      margin-top: 40px;
-      color: #333;
-      font-size: 13px;
-      text-align: center;
-      letter-spacing: 1px;
-      position: relative;
-      z-index: 1;
-      animation: fadeUp 0.8s ease-out 0.6s both;
-    }
-    .footer a {
-      color: #ff6666;
-      text-decoration: none;
-    }
-    .footer .saved {
-      color: #555;
-      font-size: 11px;
-      margin-top: 4px;
-    }
-  </style>
+        input:focus {
+            outline: none;
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 10px rgba(0, 195, 255, 0.2);
+        }
+
+        /* Кнопки */
+        .action-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary), #0033aa);
+            border: 1px solid var(--primary-glow);
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .action-btn:hover {
+            box-shadow: 0 0 20px rgba(0, 195, 255, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .action-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Радар и Прогресс */
+        .radar-box {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin: 25px 0;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .circle-progress {
+            width: 130px;
+            height: 130px;
+            position: relative;
+            transform: rotate(-90deg);
+        }
+
+        .circle-progress svg {
+            width: 130px;
+            height: 130px;
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: #071224;
+            stroke-width: 8;
+        }
+
+        .circle-bar {
+            fill: none;
+            stroke: var(--primary-glow);
+            stroke-width: 8;
+            stroke-dasharray: 377;
+            stroke-dashoffset: 377;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.1s linear;
+        }
+
+        .percentage-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(90deg);
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        /* Терминал */
+        .terminal {
+            display: none;
+            background: #03070f;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            height: 140px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            color: #a0b0c5;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .terminal::-webkit-scrollbar {
+            width: 5px;
+        }
+        .terminal::-webkit-scrollbar-thumb {
+            background: var(--border);
+        }
+
+        .log-line {
+            margin-bottom: 6px;
+            white-space: nowrap;
+        }
+        .log-success { color: var(--success); }
+        .log-warning { color: #ff5555; }
+
+        /* Вывод досье */
+        .dossier-card {
+            display: none;
+            background: #091321;
+            border-left: 4px solid var(--primary-glow);
+            border-radius: 4px;
+            padding: 20px;
+            animation: slideUp 0.5s ease forwards;
+            margin-bottom: 20px;
+        }
+
+        .dossier-title {
+            font-size: 15px;
+            color: var(--primary-glow);
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            color: #fff;
+            font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .badge {
+            background: rgba(0, 230, 118, 0.15);
+            color: var(--success);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            border: 1px solid rgba(0, 230, 118, 0.3);
+        }
+
+        /* Кнопка экспорта */
+        .export-btn {
+            display: none;
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            border: 2px solid var(--success);
+            color: var(--success);
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .export-btn:hover {
+            background: var(--success);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- ПАРТИКЛЫ ФОНА -->
-  <div class="particles" id="particles"></div>
+<div class="container">
+    <h2>Глобальный Поиск и Анализ Утечек</h2>
 
-  <!-- ШАПКА -->
-  <div class="header">
-    <h1>BLACKOUT</h1>
-    <div class="sub"><span>⬡</span> ДОНАТ · Ч/Б СКРИНЫ <span>⬡</span></div>
-  </div>
-
-  <!-- ВЫБОР СУММЫ -->
-  <div class="donate-selector">
-    <span class="label">Выберите сумму <span>доната</span></span>
-    <div class="amount-buttons">
-      <button class="amount-btn" data-amount="100">100 R$</button>
-      <button class="amount-btn" data-amount="500">500 R$</button>
-      <button class="amount-btn active" data-amount="1000">1000 R$</button>
-      <button class="amount-btn" data-amount="5000">5000 R$</button>
+    <!-- Вкладки видов поиска -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('phone')">📱 По номеру</button>
+        <button class="tab-btn" onclick="switchTab('email')">📧 По Email</button>
+        <button class="tab-btn" onclick="switchTab('fio')">👤 По ФИО</button>
     </div>
-    <div class="selected-display">
-      <span id="selectedAmount">1000</span> <small>R$</small>
+
+    <!-- Контент вкладок -->
+    <div id="phone-group" class="input-group active">
+        <label for="phone-input">Введите Номер Телефона:</label>
+        <input type="text" id="phone-input" placeholder="+7 (999) 000-00-00">
     </div>
-  </div>
 
-  <!-- ГАЛЕРЕЯ -->
-  <div class="gallery">
-    <div class="card">
-      <img src="IMG_3280.webp" alt="промокод" />
-      <div class="donat-badge">ДОНАТ <span class="amount" id="badge1">1000</span> R$</div>
+    <div id="email-group" class="input-group">
+        <label for="email-input">Введите Email Адрес:</label>
+        <input type="email" id="email-input" placeholder="example@mail.com">
     </div>
-    <div class="card">
-      <img src="IMG_3279.webp" alt="мои покупки" />
-      <div class="donat-badge">ДОНАТ <span class="amount" id="badge2">1000</span> R$</div>
+
+    <div id="fio-group" class="input-group">
+        <label for="fio-input">Введите Полное ФИО человека:</label>
+        <input type="text" id="fio-input" placeholder="Иванов Иван Иванович">
     </div>
-    <div class="card">
-      <img src="IMG_3278.webp" alt="розыгрыш" />
-      <div class="donat-badge">ДОНАТ <span class="amount" id="badge3">1000</span> R$</div>
-    </div>
-    <div class="card">
-      <img src="IMG_3277.webp" alt="бонусный баланс" />
-      <div class="donat-badge">ДОНАТ <span class="amount" id="badge4">1000</span> R$</div>
-    </div>
-    <div class="card">
-      <img src="IMG_3276.webp" alt="лучший курс" />
-      <div class="donat-badge">ДОНАТ <span class="amount" id="badge5">1000</span> R$</div>
-    </div>
-  </div>
 
-  <div class="footer">
-    <p>BLACKOUT · все скрины ч/б</p>
-    <div class="saved" id="savedInfo">💾 Сохранено: 1000 R$</div>
-  </div>
-
-  <script>
-    // ============================================================
-    // 1. ПАРТИКЛЫ
-    // ============================================================
-    (function createParticles() {
-      const container = document.getElementById('particles');
-      for (let i = 0; i < 35; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.animationDuration = (Math.random() * 20 + 15) + 's';
-        p.style.animationDelay = (Math.random() * 20) + 's';
-        p.style.width = p.style.height = (Math.random() * 5 + 2) + 'px';
-        container.appendChild(p);
-      }
-    })();
-
-    // ============================================================
-    // 2. БАЗА ДАННЫХ (localStorage)
-    // ============================================================
-    const STORAGE_KEY = 'blackout_donate_amount';
-
-    function loadSavedAmount() {
-      return localStorage.getItem(STORAGE_KEY) || '1000';
-    }
-
-    function saveAmount(amount) {
-      localStorage.setItem(STORAGE_KEY, amount);
-      document.getElementById('savedInfo').textContent = '💾 Сохранено: ' + amount + ' R$';
-    }
-
-    // ============================================================
-    // 3. ЛОГИКА ВЫБОРА СУММЫ
-    // ============================================================
-    const buttons = document.querySelectorAll('.amount-btn');
-    const selectedDisplay = document.getElementById('selectedAmount');
-    const badgeSpans = document.querySelectorAll('.donat-badge .amount');
-
-    // Загружаем сохранённую сумму
-    const saved = loadSavedAmount();
-    let currentAmount = saved;
-
-    // Устанавливаем активную кнопку
-    buttons.forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.getAttribute('data-amount') === saved) {
-        btn.classList.add('active');
-      }
-    });
-
-    // Обновляем интерфейс
-    function updateUI(amount, animate = true) {
-      currentAmount = amount;
-
-      // Центральный дисплей
-      selectedDisplay.textContent = amount;
-      if (animate) {
-        selectedDisplay.classList.remove('amount-change');
-        void selectedDisplay.offsetWidth;
-        selectedDisplay.classList.add('amount-change');
-      }
-
-      // Бейджи
-      badgeSpans.forEach(badge => {
-        badge.textContent = amount;
-        if (animate) {
-          badge.classList.remove('bounce');
-          void badge.offsetWidth;
-          badge.classList.add('bounce');
-        }
-      });
-
-      // Сохраняем
-      saveAmount(amount);
-    }
-
-    // Клики по кнопкам
-    buttons.forEach(btn => {
-      btn.addEventListener('click', function() {
-        const amount = this.getAttribute('data-amount');
-        if (amount === currentAmount) return;
-
-        // Обновляем активную кнопку
-        buttons.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-
-        // Обновляем всё с анимацией
-        updateUI(amount, true);
-      });
-    });
-
-    // Инициализация
-    updateUI(saved, false);
-
-    // ============================================================
-    // 4. ДОП. АНИМАЦИЯ ПРИ ЗАГРУЗКЕ
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', () => {
-      // Показываем сохранённое
-      console.log('BLACKOUT загружен, сохранено:', saved);
-    });
-  </script>
-
-</body>
-</html>
+    <!-- Основная кнопка -->
